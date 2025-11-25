@@ -1,67 +1,76 @@
-def view_tasks(task_list):
-    """Displays all tasks with numbers using a standard loop."""
-    if not task_list:
+# --- GLOBAL VARIABLE ---
+tasks = [] 
+
+def view_tasks():
+    """Displays all tasks using explicit length checks."""
+    # REPLACED: if not tasks:
+    if len(tasks) == 0:
         print("\nYour task list is empty!")
     else:
         print("\n---- YOUR TASKS ----")
-        # Concept: len() gives the total count. range() generates numbers 0, 1, 2...
-        for i in range(len(task_list)):
-            # We use [i] to access the item at that specific position
-            # We add 1 to i because Python lists start at 0, but humans count from 1
-            print(f"{i + 1}. {task_list[i]}")
+        for i in range(len(tasks)):
+            print(f"{i + 1}. {tasks[i]}")
         print("--------------------")
 
-def add_task(task_list):
-    """Adds a new task to the list."""
-    task_name = input("Enter the task you want to add: ").strip() 
-    if task_name:
-        task_list.append(task_name)
+def add_task():
+    """Adds a task to the global list."""
+    task_name = input("Enter the task you want to add: ").strip()
+    
+    # Check length to ensure it's not empty
+    if len(task_name) > 0:
+        tasks.append(task_name)
         print(f"Task '{task_name}' successfully added.")
     else:
         print("Cannot add an empty task.")
 
-def update_task(task_list):
-    """Updates an existing task."""
-    view_tasks(task_list) 
-    if not task_list:
+def update_task():
+    """Updates a task in the global list."""
+    view_tasks()
+    
+    # REPLACED: if not tasks:
+    if len(tasks) == 0:
         return
 
     name_to_update = input("Enter the exact name of the task to update: ").strip()
     
-    if name_to_update in task_list:
+    if name_to_update in tasks:
         new_task = input("Enter the new task name: ").strip()
-        if new_task:
-            index = task_list.index(name_to_update)
-            task_list[index] = new_task
+        
+        if len(new_task) > 0:
+            index = tasks.index(name_to_update)
+            tasks[index] = new_task
             print(f"Updated '{name_to_update}' to '{new_task}'.")
         else:
             print("Update failed. New task name cannot be empty.")
     else:
         print("Task not found.")
 
-def delete_task(task_list):
-    """Deletes a task from the list."""
-    view_tasks(task_list)
-    if not task_list:
+def delete_task():
+    """Deletes a task from the global list."""
+    view_tasks()
+    
+    # REPLACED: if not tasks:
+    if len(tasks) == 0:
         return
 
     name_to_delete = input("Enter the exact name of the task to delete: ").strip()
     
-    if name_to_delete in task_list:
-        task_list.remove(name_to_delete)
+    if name_to_delete in tasks:
+        tasks.remove(name_to_delete)
         print(f"Task '{name_to_delete}' has been deleted.")
     else:
         print("Task not found.")
 
 def main():
-    tasks = [] 
     print("---- WELCOME TO THE TASK MANAGEMENT APP ----")
 
     try:
         total_task = int(input("How many initial tasks do you want to add? "))
         for i in range(total_task):
             task_name = input(f"Enter task {i + 1}: ").strip()
-            tasks.append(task_name)
+            # Explicit check to ensure valid data
+            if len(task_name) > 0:
+                tasks.append(task_name)
     except ValueError:
         print("Invalid input. Starting with an empty list.")
 
@@ -77,13 +86,13 @@ def main():
             operation = int(input("Choose an operation (1-5): "))
 
             if operation == 1:
-                add_task(tasks)
+                add_task()
             elif operation == 2:
-                update_task(tasks)
+                update_task()
             elif operation == 3:
-                delete_task(tasks)
+                delete_task()
             elif operation == 4:
-                view_tasks(tasks)
+                view_tasks()
             elif operation == 5:
                 print("Closing the program... Goodbye!")
                 break
